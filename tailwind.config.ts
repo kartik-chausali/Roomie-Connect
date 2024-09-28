@@ -11,11 +11,18 @@ const config: Config = {
   ],
   theme: {
   	extend: {
+		fontFamily:{
+			
+		},
   		colors: {
 			"background-black":"#08090A",
 			"nav-default":"#CDCDCD",
 			"nav-background":"#090A0A",
 			"login-background":"#28282C",
+			"appbar-border":"#1D1D1D",
+			"logo-color-green":"#16B26A",
+			"searchBar-border":"#16B26A",
+			"searchBar-background":"#F3F4F6",
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
