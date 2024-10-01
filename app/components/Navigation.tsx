@@ -20,6 +20,7 @@ import MapIcon from "../icons/mapIcon";
 import LocationIcon from "../icons/locationIcon";
 import ChatIcon from "../icons/chatIcon";
 import SearchIcon from "../icons/roomSearch";
+import ReviewIcon from "../icons/reviewIcon";
 export default function Navigation(){
     
     return (<NavigationMenu>
@@ -71,6 +72,7 @@ export default function Navigation(){
           <ListItem href="/" title="Map View" icon={<MapIcon/>}>Check Map View and Location of the room </ListItem>
           <ListItem href="/" title="Nearest to your Location" icon={<LocationIcon/>}>Find Rooms Nearest to your Location</ListItem>
           <ListItem href="/" title="Chat Support" icon={<ChatIcon/>}>Chat with others to finalize the deal</ListItem>
+          <ListItem href="/" title="Reviews" icon={<ReviewIcon/>}> Read reviews about someone from their past roomates</ListItem>
         {/* </div>
         </div> */}
 

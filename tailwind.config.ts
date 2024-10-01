@@ -12,7 +12,7 @@ const config: Config = {
   theme: {
   	extend: {
 		fontFamily:{
-			
+			heading:['Poppins']
 		},
   		colors: {
 			"background-black":"#08090A",
@@ -23,6 +23,7 @@ const config: Config = {
 			"logo-color-green":"#16B26A",
 			"searchBar-border":"#16B26A",
 			"searchBar-background":"#F3F4F6",
+			"createProfile-background":"#F7FAFC",
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
