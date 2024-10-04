@@ -14,13 +14,15 @@ import {
   import Link from 'next/link'
 import Features from "./Features"
 import roomate from '../icons/roommate.png'
-import React from "react";
+import React, { lazy } from "react";
 import { cn } from "@/lib/utils";
-import MapIcon from "../icons/mapIcon";
-import LocationIcon from "../icons/locationIcon";
-import ChatIcon from "../icons/chatIcon";
-import SearchIcon from "../icons/roomSearch";
-import ReviewIcon from "../icons/reviewIcon";
+
+const SearchIcon = lazy(()=> import("../icons/roomSearch"))
+const ReviewIcon = lazy(()=> import("../icons/reviewIcon"))
+const LocationIcon = lazy(()=> import( "../icons/locationIcon"))
+const MapIcon = lazy(()=> import("../icons/mapIcon"))
+const ChatIcon = lazy(()=>import("../icons/chatIcon"))
+
 export default function Navigation(){
     
     return (<NavigationMenu>
@@ -36,8 +38,6 @@ export default function Navigation(){
           <li className="row-span-3 p-2">
              <NavigationMenuLink asChild>
              <a className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md" href="/">
-                
-            {/* <Image src = {roomate} alt="logo"/> */}
             <SearchIcon/>
              <div className="mb-2 mt-4 text-lg font-medium">
                      Looking For a RoomMate?
