@@ -11,6 +11,19 @@ const config: Config = {
   ],
   theme: {
   	extend: {
+		animation: {
+			rotate: 'rotate 10s linear infinite',
+			border:'border 4s linear infinite'
+		  },
+		  keyframes: {
+			border: {
+                    to: { '--border-angle': '360deg' },
+                },
+			rotate: {
+			  '0%': { transform: 'rotate(0deg) scale(10)' },
+			  '100%': { transform: 'rotate(-360deg) scale(10)' },
+			},
+		  },
 		fontFamily:{
 			heading:['Poppins']
 		},

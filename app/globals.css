@@ -13,6 +13,25 @@ body {
     text-wrap: balance;
   }
 }
+@property --border-angle {
+  inherits: false;
+  initial-value: 0deg;
+  syntax: '<angle>';
+}
+
+@keyframes border-spin {
+  0% {
+    --border-angle: 0deg;
+  }
+  100% {
+    --border-angle: 360deg;
+  }
+}
+
+.animate-border {
+  animation: border-spin 5s linear infinite; /* Slowed from 10s to 20s */
+}
+
 
 @layer base {
   :root {

@@ -1,5 +1,26 @@
 import CredentialsProvider  from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google'
+import prisma from './singletonDb';
+import { redirect } from 'next/navigation'
+import { Session } from 'inspector/promises';
+import {JWTPayload, SignJWT, importJWK } from 'jose'
+import { JWT } from "next-auth/jwt";
+
+export interface session extends Session {
+    user: {
+      id: string;
+      jwtToken: string;
+      email: string;
+      name: string;
+    };
+  }
+
+  interface User {
+    id: string;
+    name: string;
+    email: string;
+    token: string;
+  }
 
 export const NEXT_AUTH = {
     providers:[
@@ -11,11 +32,53 @@ export const NEXT_AUTH = {
                 password:{label:"Password", type:"password", placeholder:"password"}
             },
             async authorize(credentials:any){
+               
+              
+                
+                const response = await prisma.user.findFirst({
+                    where:{
+                        email:credentials.username,
+                        password:credentials.password
+                    }
+                })
+            
+                
+                if(response){
+                    const jwt = generateToken({
+                        id:response.id
+                    });
 
-                return {
-                    id:"userid",
-                    name:"kartik"
+                        return {
+                            id:response.id,
+                            name:response.name,
+                            email:credentials.username,
+                            token:jwt
+                        }
                 }
+
+                try{
+                    
+                    const user= await prisma.user.create({
+                        data:{
+                            email:credentials.username,
+                            password:credentials.password,
+                            name:credentials.name
+                        }
+                    })
+
+                    const jwt = generateToken({id:user.id});
+                    
+                    return {
+                        id:user.id,
+                        name:credentials.name,
+                        email:credentials.username,
+                        token:jwt
+                    }
+
+                }catch(error){
+                    return null
+                }
+               
             }
         }),
         GoogleProvider({
@@ -26,7 +89,36 @@ export const NEXT_AUTH = {
     secret:process.env.NEXTAUTH_SECRET,
     callbacks:{
         session: ({session, token, user}:any)=>{
+            const newSession: session = session as session
+            if(newSession && token.uid){
+                newSession.user.id = token.uid as string;
+                newSession.user.jwtToken = token.jwtToken as string;
+            }
             return session
+        },
+      jwt:({token , user}:any)=>{
+        const newToken = token;
+    
+        if (user) {
+          newToken.uid = user.id;
+          newToken.jwtToken = (user as User).token;
         }
+        return newToken;
+      }
     }
+}
+
+async function generateToken(payload:JWTPayload){
+    const secret  = process.env.JWT_SECRET || "secret";
+
+    const jwk = await importJWK({k:secret , alg:"HS256", kty:"oct"});
+
+    const jwt = await new SignJWT(payload)
+    .setProtectedHeader({alg:"HS256"})
+    .setIssuedAt()
+    .setExpirationTime("365d")
+    .sign(jwk)
+
+    return jwt
+    
 }
