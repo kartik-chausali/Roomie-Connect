@@ -26,10 +26,10 @@ export default function AppBar(){
   //   return () => window.removeEventListener('scroll', handleScroll)
   // },[])
 
-  console.log("sessino", session);
+  
   
    
-    return <div className="flex justify-center items-center ">
+    return <div className="flex justify-center items-center m-20 ">
         <div className={`w-fit p-2 shadow-lg fixed transition-colors duration-500 [background:linear-gradient(45deg,#172033,theme(colors.slate.800)_50%,#172033)_padding-box,conic-gradient(from_var(--border-angle),theme(colors.slate.600/.48)_80%,_theme(colors.indigo.500)_86%,_theme(colors.indigo.300)_90%,_theme(colors.indigo.500)_94%,_theme(colors.slate.600/.48))_border-box] top-0 left-0 right-0 z-50 mx-auto m-3 flex flex-wrap gap-2  justify-center items-center  rounded-2xl border border-transparent animate-border`}>
             <div className="flex items-center">
             <Image src={roomate} alt="room" className="h-10 w-10 rounded-lg"/>

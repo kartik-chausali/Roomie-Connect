@@ -37,6 +37,8 @@ const config: Config = {
 			"searchBar-border":"#16B26A",
 			"searchBar-background":"#F3F4F6",
 			"createProfile-background":"#F7FAFC",
+			"light-black":"#27272A",
+			"tabs-black":"#09090B",
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {

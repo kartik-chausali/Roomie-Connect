@@ -32,16 +32,16 @@ export default function Room(){
     return <div className="flex justify-center items-center">
        <div className="grid grid-cols-3 ">
        
-       <div className=" w-fit shadow-md rounded-sm bg-cover p-4 gap-x-96">
+       <div className=" w-fit shadow-md rounded-xl bg-cover p-4 gap-x-96 border border-white border-opacity-55 ">
         
        <div className="relative">
     <img className="w-full h-48 object-cover" src="https://images.unsplash.com/photo-1557862921-37829c790f19?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHw4fHx1c2VyfGVufDB8MHx8fDE2OTQwOTU5Nzl8MA&ixlib=rb-4.0.3&q=80&w=1080" alt="Profile Image"/>
   </div>
 
-        <span className="text-3xl font-bold pt-8 lg:pt-0 bg-cover">Your Name</span>
+        <span className="text-3xl font-bold pt-8 lg:pt-0 bg-cover text-white">Your Name</span>
         <div className="mx-auto lg:mx-0 w-4/5 pt-3 border-b-2 border-green-500 opacity-25"></div>
 
-        <p className="pt-4 text-base font-bold flex items-center justify-center lg:justify-start">
+        <p className="pt-4 text-base font-bold flex items-center justify-center lg:justify-start text-white">
                     <svg className="h-4 fill-current text-green-700 pr-4" xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 20 20">
                         <path
@@ -49,7 +49,7 @@ export default function Room(){
                     </svg> What you do
                 </p>
 
-                <p className="pt-2 text-gray-600 text-xs lg:text-sm flex items-center justify-center lg:justify-start whitespace-nowrap">
+                <p className="pt-2 text-neutral-500  text-xs lg:text-sm flex items-center justify-center lg:justify-start whitespace-nowrap">
                     <svg className="h-4 fill-current text-green-700 pr-4" xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 20 20">
                         <path
@@ -57,7 +57,7 @@ export default function Room(){
                     </svg> Looking Around - 25.0000° N, 71.0000° W
                 </p>
 
-                <p className="pt-8 text-sm">Totally optional short description about yourself, what you do and so on.</p>
+                <p className="pt-8 text-sm text-white">Totally optional short description about yourself, what you do and so on.</p>
 
                 {/* <div className="pt-12 pb-8">
                     <button className="bg-green-700 hover:bg-green-900 text-white font-bold py-2 px-4 rounded-full">
@@ -77,7 +77,7 @@ export default function Room(){
             }else{
                 setChat(true);
             }
-        }} className="group relative cursor-pointer w-fit h-fit overflow-hidden m-4 ring-1 ring-green-500 ring-opacity-25 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:mx-auto sm:max-w-sm sm:rounded-lg sm:px-10">
+        }} className="group relative cursor-pointer w-fit h-fit overflow-hidden m-4   transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:mx-auto sm:max-w-sm sm:rounded-lg sm:px-10">
         <span className="absolute z-0 h-12 w-12 rounded-full bg-sky-500 transition-all duration-300 group-hover:scale-[10]"></span>
         <div className="relative z-10 mx-auto max-w-md flex items-center">
             <span className="grid h-12 w-12 place-items-center rounded-full bg-sky-500 transition-all duration-300 group-hover:bg-sky-400">
@@ -85,7 +85,7 @@ export default function Room(){
                 <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
                 </svg>
             </span>
-            <span className="font-bold py-2 px-4">Chat</span>
+            <span className="font-bold py-2 px-4 text-white">Chat</span>
             </div>
             </div>
 

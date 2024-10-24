@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { Textarea } from "@/components/ui/textarea"
-
+import Image from 'next/image'
 interface suggestionsType{
             id: number,
             wikiDataId: string,
@@ -32,6 +32,8 @@ import {
     SelectValue,
   } from "@/components/ui/select"
 import { Button } from "@/components/ui/button";
+import { useSession } from "next-auth/react";
+import prisma from "@/lib/singletonDb";
 
   
 export default function Home(){
@@ -40,6 +42,9 @@ export default function Home(){
     const[suggestions ,setSuggestions] = useState<suggestionsType[]>([]);
     const[badges, setBadges] = useState<string[]>([]);
     const inputRef = useRef<HTMLInputElement>(null);
+    const session = useSession();
+
+    console.log("session", session.data?.user?.id);
 
     const fetchSuggestions = async()=>{
       try{  
@@ -65,6 +70,41 @@ export default function Home(){
             return ()=> clearTimeout(timer);
         }
     },[query])
+
+     function handlePost(){
+       const file =  inputRef.current?.files?.[0]
+       console.log("file", file)
+        if(!file){
+            alert("Please select a file");
+            return ;
+        }
+
+        const formData = new FormData();
+        formData.append('file', file); // Append the file to FormData
+        formData.append('name', file.name); // You can pass the file name as well
+        
+        try{
+            axios.post('/api/user/roomWanted', formData).then(response => {
+              console.log('Upload success', response);
+            }).catch(error => {
+              console.error('Upload failed', error);
+            });
+        }catch(error){
+                console.log("error while uploading image", error);
+            }
+          
+  
+        // try{
+        //     await prisma.roomPost.create({
+        //         data:{
+        //             userId: session.data?.user.id || "",
+
+        //         }
+        //     })
+        // }catch(error){
+        //     console.log("error" , error);
+        // }
+    }
 
     return <div className="flex flex-col justify-center items-center">
         <div className="flex flex-col p-4">
@@ -146,6 +186,10 @@ export default function Home(){
             </Select>
             </div>
 
+            <div className="m-4">
+                <label className="font-semibold m-1 text-md">Your photo</label>
+                <input type="file" ref={inputRef}/>
+            </div>
             
         </div>
 
@@ -153,8 +197,8 @@ export default function Home(){
         <label>Pitch yourself about "why you will be an ideal roomate"</label>
         <Textarea className="" placeholder="I am very friendly and hygenic.."/>
         </div>
-
-        <Button className="w-1/3 m-4">Post</Button>
+        <Button className="w-1/3 m-4" onClick={handlePost}>Post</Button>
+        
     </div>
 }
 

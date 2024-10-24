@@ -5,15 +5,15 @@ import { useEffect, useState , useRef} from "react";
 export default function Chat(){
     const chat = useIsChatOpen((state)=> state.isChatOpen)
     const setChat = useIsChatOpen((state)=> state.setIsChatOpen)
-    const receiversChat = useUser((state)=> state.receiversChat);
-    const sendersChat = useUser((state)=> state.sendersChat);
+    // const receiversChat = useUser((state)=> state.receiversChat);
+    // const sendersChat = useUser((state)=> state.sendersChat);
     const name = useUser((state)=> state.name);
     const image = useUser((state)=>state.image);
-    const setReceiversChat = useUser((state)=> state.setReceiversChat);
-    const setSendersChat = useUser((state)=> state.setSendersChat);
+    // const setReceiversChat = useUser((state)=> state.setReceiversChat);
+    // const setSendersChat = useUser((state)=> state.setSendersChat);
     const [socket, setSocket]= useState<WebSocket | null>(null);
-    const [latestSenderMessage, setLatestSenderMessages] = useState("")
-    const [latestReceiverMessage, setLatestReceiverMessages] = useState("");
+    // const [latestSenderMessage, setLatestSenderMessages] = useState("")
+    // const [latestReceiverMessage, setLatestReceiverMessages] = useState("");
     const inputRef = useRef<HTMLInputElement>(null);
     const[mergedChats, setMergedChats] = useState<{message:string , sender:string}[]>([])
     useEffect(()=>{
@@ -24,8 +24,8 @@ export default function Chat(){
         }
 
         socket.onmessage = (message)=>{
-           setReceiversChat([...receiversChat, message.data])
-           setLatestReceiverMessages(message.data);
+        //    setReceiversChat([...receiversChat, message.data])
+        //    setLatestReceiverMessages(message.data);
            setMergedChats((prev)=>[...prev, {message:message.data, sender:'receiver'}])
         //    console.log("message received ", message);
         }
@@ -106,8 +106,8 @@ export default function Chat(){
                 <button id="send-button" onClick={()=>{
                     if(inputRef.current && inputRef.current.value.length>0 && socket){
                         socket.send(inputRef.current.value);
-                       setSendersChat([...sendersChat, inputRef.current.value])
-                       setLatestSenderMessages(inputRef.current.value);
+                    //    setSendersChat([...sendersChat, inputRef.current.value])
+                    //    setLatestSenderMessages(inputRef.current.value);
                        setMergedChats([...mergedChats, {message:inputRef.current.value, sender:"sender"}])
                         inputRef.current.value = "";
                     }

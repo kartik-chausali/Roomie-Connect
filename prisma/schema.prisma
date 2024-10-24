@@ -38,6 +38,12 @@ model Message{
 model RoomPost{
   id String @id @default(cuid())
   userId String @unique
+  budget String
+  lookingFor String
+  about String
+  profession String
+  lookingAround String[]
+  image String
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 

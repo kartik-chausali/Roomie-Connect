@@ -5,8 +5,9 @@ import { redirect } from 'next/navigation'
 import { Session } from 'inspector/promises';
 import {JWTPayload, SignJWT, importJWK } from 'jose'
 import { JWT } from "next-auth/jwt";
+import { DefaultSession } from 'next-auth';
 
-export interface session extends Session {
+export interface session extends DefaultSession{
     user: {
       id: string;
       jwtToken: string;
@@ -90,11 +91,11 @@ export const NEXT_AUTH = {
     callbacks:{
         session: ({session, token, user}:any)=>{
             const newSession: session = session as session
-            if(newSession && token.uid){
+            if(newSession.user && token.uid){
                 newSession.user.id = token.uid as string;
                 newSession.user.jwtToken = token.jwtToken as string;
             }
-            return session
+            return newSession
         },
       jwt:({token , user}:any)=>{
         const newToken = token;
