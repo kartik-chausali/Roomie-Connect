@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { NextRequest, NextResponse } from "next/server";
 import {S3Client, PutObjectCommand} from '@aws-sdk/client-s3'
-import fs from 'fs'
-import path from "path";
-import formidable from 'formidable'
-import { promisify } from "util";
-import { NextApiRequest, NextApiResponse } from "next";
-import {IncomingForm, Fields, Files} from 'formidable';
+import prisma from "@/lib/singletonDb";
+import { getServerSession } from "next-auth";
+import { NEXT_AUTH } from "@/lib/auth";
+import { toast } from "@/hooks/use-toast";
+
 //Since you're now sending the file itself (not the file path), 
 //you'll need to use a middleware like formidable to parse the file from the request.
 // Disable Next.js's default body parser for this API route
@@ -30,24 +30,18 @@ import {IncomingForm, Fields, Files} from 'formidable';
 
 export async function POST(req:Request){
     
-    console.log("inside post");
 
+    
+    const session = await getServerSession(NEXT_AUTH);
   
-    // const  body  = await req.json();
-    // const {filePath, name} = body;
     try{
-    // const {fields, files} = await parseForm(req);
-    // const file = files.file ? (Array.isArray(files.file) ? files.file[0] : files.file) : undefined; // Assuming "file" is the form field name for file upload
-    // if (!file) {
-    //     return res.status(400).json({ message: 'No file uploaded' });
-    //   } 
-    // const filePath = file.filepath; // Get the temporary path of the uploaded file
-    // const fileName = file.originalFilename || 'unknown_file'; // Get the original filename
+  
 
     const formData = await req.formData();
     const file = formData.get('file');
     const fileName = formData.get('name');
 
+    console.log('entries', formData.getAll('locations'), formData.get('profession'), formData.get('budget'), formData.get('about'), formData.get('gender'), formData.get('lookingFor'))
     const accessKeyId = process.env.AWS_ACCESS_KEY
     const secretAccessKey= process.env.AWS_SECRET_KEY
     const region = process.env.AWS_REGION
@@ -83,15 +77,48 @@ export async function POST(req:Request){
         Body:fileBuffer,
         ContentType: file.type || 'application/octet-stream',
     }
+    
+    const existingPost = await prisma.roomatePost.findUnique({
+        where:{
+            userId: session?.user.id
+        }
+    });
 
+    if(existingPost){
+        return NextResponse.json({msg:"A post with userId already exists"}, {status:401});
+    }
     const result = await s3.send(new PutObjectCommand(uploadParams));
 
     const imageUrl = `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileName}`
 
-    return NextResponse.json({ message: 'File uploaded successfully', imageUrl })
+    const post = await prisma.roomatePost.create({
+        data:{
+            image:imageUrl,
+            locations: formData.getAll('locations') as string[],
+            profession:formData.get('profession') as string,
+            about:formData.get('about') as string,
+            gender: formData.get('gender') as string,
+            budget: formData.get('budget') as string,
+            lookingFor: formData.get('lookingFor') as string,
+            name: formData.get('name') as string,
+            user: {connect:{id: session?.user.id}}
+        }
+    })
+   
+     return NextResponse.json({ message: 'Posted successfully', post } )
     }catch (error) {
+  
         console.error('Error during file upload:', error);
         return NextResponse.json({ message: 'File upload failed', error })
       }
 
+}
+
+export async function GET(){
+    try{
+        const response = await prisma.roomatePost.findMany();
+        return NextResponse.json({data:response})
+    }catch(error){
+        return NextResponse.json({error} , {status:411})
+    }
 }

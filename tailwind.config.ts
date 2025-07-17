@@ -13,7 +13,9 @@ const config: Config = {
   	extend: {
 		animation: {
 			rotate: 'rotate 10s linear infinite',
-			border:'border 4s linear infinite'
+			border:'border 4s linear infinite',
+			move: "move 5s linear infinite",
+			shimmer: "shimmer 2s linear infinite"
 		  },
 		  keyframes: {
 			border: {
@@ -23,6 +25,18 @@ const config: Config = {
 			  '0%': { transform: 'rotate(0deg) scale(10)' },
 			  '100%': { transform: 'rotate(-360deg) scale(10)' },
 			},
+			move: {
+				"0%": { transform: "translateX(-200px)" },
+				"100%": { transform: "translateX(200px)" },
+			  },
+			  shimmer: {
+				from: {
+				  "backgroundPosition": "0 0"
+				},
+				to: {
+				  "backgroundPosition": "-200% 0"
+				}
+			  }
 		  },
 		fontFamily:{
 			heading:['Poppins']
@@ -39,6 +53,12 @@ const config: Config = {
 			"createProfile-background":"#F7FAFC",
 			"light-black":"#27272A",
 			"tabs-black":"#09090B",
+			"nav-border":"hsl(240 3.7% 15.9%)",
+			"nav-blendColor":"rgba(40,40,40,0.70)",
+			"formPurple":"#2A2A3B",
+			"formBlack":"#1C2126",
+			"formLight":"#2E2E41",
+			"formCard":"#1B2532",
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {

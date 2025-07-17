@@ -1,11 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import CredentialsProvider  from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google'
 import prisma from './singletonDb';
-import { redirect } from 'next/navigation'
-import { Session } from 'inspector/promises';
 import {JWTPayload, SignJWT, importJWK } from 'jose'
-import { JWT } from "next-auth/jwt";
 import { DefaultSession } from 'next-auth';
+import { toast } from '@/hooks/use-toast';
+import { redirect } from 'next/dist/server/api-utils';
 
 export interface session extends DefaultSession{
     user: {
@@ -35,15 +36,14 @@ export const NEXT_AUTH = {
             async authorize(credentials:any){
                
               
-                
+                try{
                 const response = await prisma.user.findFirst({
                     where:{
                         email:credentials.username,
                         password:credentials.password
                     }
                 })
-            
-                
+
                 if(response){
                     const jwt = generateToken({
                         id:response.id
@@ -56,6 +56,16 @@ export const NEXT_AUTH = {
                             token:jwt
                         }
                 }
+
+                }catch(error){
+                    toast({
+                        title:"error",
+                        variant:"destructive"
+                    })
+                    console.log("error while login", error);
+                }
+                
+                
 
                 try{
                     
@@ -105,7 +115,8 @@ export const NEXT_AUTH = {
           newToken.jwtToken = (user as User).token;
         }
         return newToken;
-      }
+      },
+     
     }
 }
 

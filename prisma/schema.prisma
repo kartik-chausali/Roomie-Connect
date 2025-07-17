@@ -11,7 +11,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  directUrl = env("DATABASE_URL")
 }
 
 model User{
@@ -38,12 +38,6 @@ model Message{
 model RoomPost{
   id String @id @default(cuid())
   userId String @unique
-  budget String
-  lookingFor String
-  about String
-  profession String
-  lookingAround String[]
-  image String
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
@@ -51,10 +45,13 @@ model RoomatePost{
   id String @id @default(cuid())
   userId String @unique
   about String
+  profession String
   gender String
   lookingFor String
   locations String[]
-  budget Int
+  image String
+  budget String
+  name String
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 

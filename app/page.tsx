@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import Image from "next/image";
+
 import AppBar from "./components/AppBar";
 import Search from "./components/Search";
 import Recomended from "./components/Recomended";
 import Chat from "./components/Chat";
-
-export default function Home() {
+import MapView from './components/MapView'
+export default async function Home() {
+ 
   return (
    
      <>
@@ -13,6 +14,7 @@ export default function Home() {
      <Search/>
      <Recomended/>
      <Chat/>
+    <MapView/>
      </>
   );
 }
