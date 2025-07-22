@@ -5,8 +5,9 @@ import { Button } from "@/components/ui/button"
 import { Cross2Icon } from "@radix-ui/react-icons"
 import { InputData } from './app-room-wanted-room-wanted-form'
 
+
 interface ImageUploadProps {
-  images: string[] | undefined
+  images: File[] | undefined
   setInputData: React.Dispatch<React.SetStateAction<InputData>>
 }
 
@@ -34,13 +35,13 @@ export function ImageUpload({ images, setInputData }: ImageUploadProps) {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault()
-    if (e.target.files && e.target.files[0]) {
+    if (e.target.files && e.target.files.length> 0) {
       handleFiles(e.target.files)
     }
   }
 
   const handleFiles = (files: FileList) => {
-    const newImages = Array.from(files).map(file => URL.createObjectURL(file))
+    const newImages = Array.from(files)
     setInputData((prev) => ({...prev , images: [...prev.images , ...newImages]}))
    
   }
@@ -75,9 +76,10 @@ export function ImageUpload({ images, setInputData }: ImageUploadProps) {
       </div>
       {images && images.length > 0 && (
         <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-          {images.map((image, index) => (
-            <div key={index} className="relative">
-              <img src={image} alt={`Uploaded ${index + 1}`} className="w-full h-32 object-cover rounded-lg" />
+          {images.map((image, index) => {
+            const previewImage = URL.createObjectURL(image);
+            return <div key={index} className="relative">
+              <img src={previewImage} alt={`Uploaded ${index + 1}`} className="w-full h-32 object-cover rounded-lg" />
               <Button
                 type="button"
                 variant="destructive"
@@ -88,7 +90,7 @@ export function ImageUpload({ images, setInputData }: ImageUploadProps) {
                 <Cross2Icon className="h-4 w-4" />
               </Button>
             </div>
-          ))}
+})}
         </div>
       )}
     </div>

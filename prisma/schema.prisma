@@ -38,6 +38,16 @@ model Message{
 model RoomPost{
   id String @id @default(cuid())
   userId String @unique
+  images String[]
+  propertyName String
+  owner String
+  email String
+  rent Int
+  roomType String
+  location String
+  longitude String
+  latitude String
+  about String
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 

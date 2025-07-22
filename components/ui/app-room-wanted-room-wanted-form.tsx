@@ -9,9 +9,13 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent } from "@/components/ui/card"
 import { ImageUpload } from './app-room-wanted-image-upload'
+import { CLIENT_STATIC_FILES_RUNTIME_POLYFILLS_SYMBOL } from 'next/dist/shared/lib/constants'
+import axios, { AxiosError } from "axios";
+import { toast } from "@/hooks/use-toast";
+import { redirect } from 'next/navigation'
 
 export interface InputData{
-  images: string[],
+  images: File[],
   propertyName: string,
   owner: string,
   email: string,
@@ -38,8 +42,48 @@ export function RoomWantedForm() {
     // Here you would typically send the form data to your backend
     
     const formData = new FormData();
-    
-    console.log('Form submitted')
+     if(!inputData.images){
+            alert("Please select a file");
+            return ;
+        }
+      inputData.images.forEach((file)=>{
+        console.log("on frontend" , file );
+        formData.append(`image` , file);
+        formData.append('fileName' , file.name);
+      })
+      formData.append('propertyName' , inputData.propertyName);
+      formData.append('owner' , inputData.owner);
+      formData.append('email' , inputData.email)
+      formData.append('rent' , inputData.rent+'')
+      formData.append('roomType' , inputData.roomType)
+      formData.append('location' , inputData.location)
+      formData.append('about' , inputData.about || "" )
+      
+      try{
+
+        const response = await axios.post('/api/user/listRoom', formData)
+             
+             toast({
+                title:"Posted Successfully!",
+                variant:"default"
+             })
+             redirect('/');
+      }catch(error){
+
+        if (error instanceof AxiosError && error.response) {
+                        toast({
+                            title: `${error.response.data.msg}`,
+                            variant: "destructive",
+                        });
+                    } else {
+                        toast({
+                            title: "An unexpected error occurred",
+                            variant: "destructive",
+                        });
+                    }
+                    console.log("Error while uploading image", error);
+       }
+              
   }
  
     return (
