@@ -47,7 +47,7 @@ export function ImageUpload({ images, setInputData }: ImageUploadProps) {
   }
 
   const removeImage = (index: number) => {
-    setInputData((prev) => ({...prev , images : prev.images.filter((_, i) => i!== index) }))
+    setInputData((prev) => ({...prev , images : prev.images.filter((_, i) => i !== index) }))
   }
 
   return (

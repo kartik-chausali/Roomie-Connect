@@ -23,6 +23,8 @@ export interface InputData{
   roomType: string,
   location: string,
   about: string,
+  latitude:number,
+  longitude:number
 }
 export function RoomWantedForm() {
   // const [images, setImages] = useState<string[]>([])
@@ -34,12 +36,13 @@ export function RoomWantedForm() {
     rent:0,
     roomType:'',
     location:'',
-    about:''
+    about:'',
+    latitude:0,
+    longitude:0
   })
   
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    // Here you would typically send the form data to your backend
     
     const formData = new FormData();
      if(!inputData.images){
@@ -58,7 +61,10 @@ export function RoomWantedForm() {
       formData.append('roomType' , inputData.roomType)
       formData.append('location' , inputData.location)
       formData.append('about' , inputData.about || "" )
-      
+      formData.append('latitude' , inputData.latitude +'')
+      formData.append('longitude' , inputData.longitude+'');
+
+
       try{
 
         const response = await axios.post('/api/user/listRoom', formData)
@@ -85,7 +91,18 @@ export function RoomWantedForm() {
        }
               
   }
- 
+  
+  function getLocation(){
+      fetch("https://ipapi.co/json/")
+      .then((response)=> response.json())
+      .then((data : any)=> {
+          console.log("data" , data)
+         setInputData({...inputData , latitude:data.latitude , longitude:data.longitude})
+      })
+      .catch(() => console.log("IP-based location failed"));
+    }
+  
+
     return (
     <div className='flex flex-col justify-center items-center mt-4'>
       <h1 className='text-white'>List your Room in minutes!<span>Fill out below form for details</span></h1>
@@ -110,7 +127,7 @@ export function RoomWantedForm() {
 
           <div className="space-y-2">
             <Label htmlFor="budget">Monthly Rent</Label>
-            <Input id="budget" type="number" min="0" step="100" required  value={inputData.rent} onChange={(e)=> setInputData((prev)=> ({...prev , rent: +e.target.value}))}/>
+            <Input id="budget" type="number" min="0" step="100" required   onChange={(e)=> setInputData((prev)=> ({...prev , rent: +e.target.value}))}/>
           </div>
 
 
@@ -131,6 +148,8 @@ export function RoomWantedForm() {
           <div className="space-y-2">
             <Label htmlFor="preferred-areas">Property Location</Label>
             <Input id="preferred-areas" placeholder="e.g. Downtown, West End"  value={inputData.location} onChange={(e) => setInputData((prev)=> ({...prev , location:e.target.value}))}/>
+            <Button onClick={getLocation}>Get Coordinates <span className='text-red-500'>*</span></Button>
+            <span> Lat: {inputData.latitude} Long:{inputData.longitude}</span>
           </div>
 
           <div className="space-y-2">

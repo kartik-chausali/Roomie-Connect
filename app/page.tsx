@@ -14,7 +14,6 @@ export default async function Home() {
      <Search/>
      <Recomended/>
      <Chat/>
-    <MapView/>
      </>
   );
 }

@@ -62,8 +62,7 @@ export async function POST(req:Request){
          if(existingPost){
         return new Response(JSON.stringify({msg:"A post with userId already exists"}), {status:401});
          }
-    console.log("log4")
-    const result = await s3.send(new PutObjectCommand(uploadParams))
+         await s3.send(new PutObjectCommand(uploadParams))
         tempImages.push(`https://${process.env.S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileName}`);
       }
 
@@ -71,7 +70,7 @@ export async function POST(req:Request){
         data:{
             images: tempImages,
             user: {connect:{id: session?.user.id}},
-            propertyName: formData.get('propertName') as string,
+            propertyName: formData.get('propertyName') as string,
             owner: formData.get('owner') as string,
             rent: Number(formData.get('rent') as string ),
             roomType: formData.get('roomType') as string,
@@ -89,3 +88,14 @@ export async function POST(req:Request){
          return new Response(JSON.stringify({ message: 'File upload failed', error }))
     }
 }
+
+
+export async function GET(){
+    try{
+        const posts = await prisma.roomPost.findMany();
+        return new Response(JSON.stringify({posts}) , {status:200});
+    }catch(error){
+        return NextResponse.json({error} , {status:411})
+    }
+}
+
